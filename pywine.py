@@ -15,6 +15,13 @@ class mainWindow(wx.Frame):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.wineView = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        self.wineView.Show(True)
+
+        # Here is a list that can be reused later
+        cs = ["ワイン", "ワイナリー", "グレープの種類", "製造年"]
+        # Add all ot the List Columns to the wineView
+        for i in range(len(cs)):
+            self.wineView.InsertColumn(i, cs[i])
         
         # Menu Bar
         self.PyWine_menubar = wx.MenuBar()
@@ -41,7 +48,6 @@ class mainWindow(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: mainWindow.__set_properties
         self.SetTitle("PyWine")
-        self.SetSize((640, 480))
         self.PyWine_toolbar.Realize()
         self.PyWine_statusbar.SetStatusWidths([-1])
         # statusbar fields
@@ -62,9 +68,8 @@ class mainWindow(wx.Frame):
     def on_AddWine(self, event): # wxGlade: mainWindow.<event_handler>
         wineDialog = wineDlg(None, -1, "")
         wineDialog.ShowModal()
-        wineDialog.Destroy()
-        
-        
+        wineDialog.Destroy()        
+
 # end of class mainWindow
 
 
@@ -125,6 +130,12 @@ class Wine:
         self.winery = winery
         self.grape = grape
         self.year = year
+
+    def getList(self):
+        """This method returns a list made up of the
+        wine information. It is used to add a wine to the
+        wineList easily"""
+        return [self,wine, self.winery, self.grape, self.year]
 
 # end of class wineDlg
 
