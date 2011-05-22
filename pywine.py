@@ -65,8 +65,8 @@ class pyWine(wx.Frame):
 
     def on_AddWine(self, event): # wxGlade: pyWine.<event_handler>
         wineDlg = wineDialog(None, -1, "")
-        wineDlg.ShowModal()
-        if wineDlg == wx.OK:
+        result = wineDlg.ShowModal()
+        if result == wx.OK:
             """The user clicked Ok, so let's add this
             wine to the wine list"""
             wineDlg.run()
@@ -135,10 +135,10 @@ class wineDialog(wx.Dialog):
     def run(self, event):
         # store the response
         # get the velue of the entry fields
-        self.wine.wine = self.enWine.GetVelue().encode('utf_8')
-        self.wine.winery = self.enWinery.GetVelue().encode('utf_8')
+        self.wine.wine = self.enWine.GetValue().encode('utf_8')
+        self.wine.winery = self.enWinery.GetValue().encode('utf_8')
         self.wine.grape = self.enGrape.GetValue().encode('utf_8')
-        self.wine.year = self.enYear.GetVelue().encode('utf_8')
+        self.wine.year = self.enYear.GetValue().encode('utf_8')
 
         return self.wine
         
