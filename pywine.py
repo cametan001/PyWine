@@ -27,7 +27,7 @@ class mainWindow(wx.Frame):
         # Tool Bar
         self.PyWine_toolbar = wx.ToolBar(self, -1)
         self.SetToolBar(self.PyWine_toolbar)
-        self.PyWine_toolbar.AddLabelTool(wx.NewId(), u"ワインの追加", wx.Bitmap("/usr/share/icons/gnome/24x24/actions/add.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("/usr/share/icons/gnome/24x24/actions/remove.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "", "")
+        self.PyWine_toolbar.AddLabelTool(wx.ID_NEW, u"ワインの追加", wx.Bitmap("/usr/share/icons/gnome/24x24/actions/add.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("/usr/share/icons/gnome/24x24/actions/remove.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "", "")
         # Tool Bar end
         self.PyWine_statusbar = self.CreateStatusBar(1, 0)
 
@@ -40,7 +40,8 @@ class mainWindow(wx.Frame):
 
     def __set_properties(self):
         # begin wxGlade: mainWindow.__set_properties
-        self.SetTitle("frame_1")
+        self.SetTitle("PyWine")
+        self.SetSize((640, 480))
         self.PyWine_toolbar.Realize()
         self.PyWine_statusbar.SetStatusWidths([-1])
         # statusbar fields
@@ -59,9 +60,11 @@ class mainWindow(wx.Frame):
         # end wxGlade
 
     def on_AddWine(self, event): # wxGlade: mainWindow.<event_handler>
-        print "Event handler `on_AddWine' not implemented!"
-        event.Skip()
-
+        wineDialog = wineDlg(None, -1, "")
+        wineDialog.ShowModal()
+        wineDialog.Destroy()
+        
+        
 # end of class mainWindow
 
 
@@ -87,7 +90,7 @@ class wineDlg(wx.Dialog):
 
     def __set_properties(self):
         # begin wxGlade: wineDlg.__set_properties
-        self.SetTitle("dialog_1")
+        self.SetTitle("Add Wine")
         self.Cancel.SetDefault()
         # end wxGlade
 
@@ -96,14 +99,14 @@ class wineDlg(wx.Dialog):
         sizer_2 = wx.BoxSizer(wx.VERTICAL)
         sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
         grid_sizer_1 = wx.GridSizer(4, 2, 0, 0)
-        grid_sizer_1.Add(self.label_1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
-        grid_sizer_1.Add(self.enWine, 0, wx.ALL|wx.EXPAND, 3)
-        grid_sizer_1.Add(self.label_2, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
-        grid_sizer_1.Add(self.enWinery, 0, wx.ALL|wx.EXPAND, 3)
-        grid_sizer_1.Add(self.label_3, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
-        grid_sizer_1.Add(self.text_ctrl_1, 0, wx.ALL|wx.EXPAND, 3)
-        grid_sizer_1.Add(self.label_4, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
-        grid_sizer_1.Add(self.enYear, 0, wx.ALL|wx.EXPAND, 3)
+        grid_sizer_1.Add(self.label_1, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
+        grid_sizer_1.Add(self.enWine, 2, wx.ALL|wx.EXPAND, 3)
+        grid_sizer_1.Add(self.label_2, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
+        grid_sizer_1.Add(self.enWinery, 2, wx.ALL|wx.EXPAND, 3)
+        grid_sizer_1.Add(self.label_3, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
+        grid_sizer_1.Add(self.text_ctrl_1, 2, wx.ALL|wx.EXPAND, 3)
+        grid_sizer_1.Add(self.label_4, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
+        grid_sizer_1.Add(self.enYear, 2, wx.ALL|wx.EXPAND, 3)
         sizer_2.Add(grid_sizer_1, 4, wx.EXPAND, 0)
         sizer_3.Add((97, 29), 0, 0, 0)
         sizer_3.Add(self.Cancel, 0, 0, 0)
@@ -113,6 +116,15 @@ class wineDlg(wx.Dialog):
         sizer_2.Fit(self)
         self.Layout()
         # end wxGlade
+
+class Wine:
+    """This class represents all the wine inbormation"""
+
+    def __init__(self, wine = "", winery = "", grape = "", year = ""):
+        self.wine = wine
+        self.winery = winery
+        self.grape = grape
+        self.year = year
 
 # end of class wineDlg
 
