@@ -66,14 +66,14 @@ class pyWine(wx.Frame):
     def on_AddWine(self, event): # wxGlade: pyWine.<event_handler>
         wineDlg = wineDialog(None, -1, "")
         result = wineDlg.ShowModal()
-        if result == wx.OK:
+        if result == wx.ID_OK:
             """The user clicked Ok, so let's add this
             wine to the wine list"""
             wineDlg.run()
-            newWine = Wine.getList()
+            newWine = wineDlg.wine.getList()
             for i in range(len(newWine)):
                 if i == 0:
-                    pos = self.wineView.SetStringItem(i, newWine[i])
+                    pos = self.wineView.InsertStringItem(i, newWine[i])
                 else:
                     self.wineView.SetStringItem(pos, i, newWine[i])
         wineDlg.Destroy()
@@ -91,7 +91,7 @@ class wineDialog(wx.Dialog):
         self.label_2 = wx.StaticText(self, -1, u"ワイナリー")
         self.enWinery = wx.TextCtrl(self, -1, "")
         self.label_3 = wx.StaticText(self, -1, u"グレープの種類")
-        self.text_ctrl_1 = wx.TextCtrl(self, -1, "")
+        self.enGrape = wx.TextCtrl(self, -1, "")
         self.label_4 = wx.StaticText(self, -1, u"製造年")
         self.enYear = wx.TextCtrl(self, -1, "")
         self.Cancel = wx.Button(self, wx.ID_CANCEL, "")
@@ -119,7 +119,7 @@ class wineDialog(wx.Dialog):
         grid_sizer_1.Add(self.label_2, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
         grid_sizer_1.Add(self.enWinery, 2, wx.ALL|wx.EXPAND, 3)
         grid_sizer_1.Add(self.label_3, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
-        grid_sizer_1.Add(self.text_ctrl_1, 2, wx.ALL|wx.EXPAND, 3)
+        grid_sizer_1.Add(self.enGrape, 2, wx.ALL|wx.EXPAND, 3)
         grid_sizer_1.Add(self.label_4, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 3)
         grid_sizer_1.Add(self.enYear, 2, wx.ALL|wx.EXPAND, 3)
         sizer_2.Add(grid_sizer_1, 4, wx.EXPAND, 0)
@@ -132,7 +132,7 @@ class wineDialog(wx.Dialog):
         self.Layout()
         # end wxGlade
 
-    def run(self, event):
+    def run(self):
         # store the response
         # get the velue of the entry fields
         self.wine.wine = self.enWine.GetValue().encode('utf_8')
