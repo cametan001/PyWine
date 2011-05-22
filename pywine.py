@@ -7,11 +7,9 @@ import wx
 # begin wxGlade: extracode
 # end wxGlade
 
-
-
-class mainWindow(wx.Frame):
+class pyWine(wx.Frame):
     def __init__(self, *args, **kwds):
-        # begin wxGlade: mainWindow.__init__
+        # begin wxGlade: pyWine.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.wineView = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
@@ -46,7 +44,7 @@ class mainWindow(wx.Frame):
         # end wxGlade
 
     def __set_properties(self):
-        # begin wxGlade: mainWindow.__set_properties
+        # begin wxGlade: pyWine.__set_properties
         self.SetTitle("PyWine")
         self.PyWine_toolbar.Realize()
         self.PyWine_statusbar.SetStatusWidths([-1])
@@ -57,7 +55,7 @@ class mainWindow(wx.Frame):
         # end wxGlade
 
     def __do_layout(self):
-        # begin wxGlade: mainWindow.__do_layout
+        # begin wxGlade: pyWine.__do_layout
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         sizer_1.Add(self.wineView, 1, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
@@ -65,17 +63,27 @@ class mainWindow(wx.Frame):
         self.Layout()
         # end wxGlade
 
-    def on_AddWine(self, event): # wxGlade: mainWindow.<event_handler>
-        wineDialog = wineDlg(None, -1, "")
-        wineDialog.ShowModal()
-        wineDialog.Destroy()        
+    def on_AddWine(self, event): # wxGlade: pyWine.<event_handler>
+        wineDlg = wineDialog(None, -1, "")
+        wineDlg.ShowModal()
+        if wineDlg == wx.OK:
+            """The user clicked Ok, so let's add this
+            wine to the wine list"""
+            wineDlg.run()
+            newWine = Wine.getList()
+            for i in range(len(newWine)):
+                if i == 0:
+                    pos = self.wineView.SetStringItem(i, newWine[i])
+                else:
+                    self.wineView.SetStringItem(pos, i, newWine[i])
+        wineDlg.Destroy()
+# end of class pyWine
 
-# end of class mainWindow
 
-
-class wineDlg(wx.Dialog):
+class wineDialog(wx.Dialog):
+    
     def __init__(self, *args, **kwds):
-        # begin wxGlade: wineDlg.__init__
+        # begin wxGlade: wineDialog.__init__
         kwds["style"] = wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
         self.label_1 = wx.StaticText(self, -1, u"ワイン")
@@ -88,19 +96,21 @@ class wineDlg(wx.Dialog):
         self.enYear = wx.TextCtrl(self, -1, "")
         self.Cancel = wx.Button(self, wx.ID_CANCEL, "")
         self.OK = wx.Button(self, wx.ID_OK, "")
+        
+        self.wine = Wine()
 
         self.__set_properties()
         self.__do_layout()
         # end wxGlade
 
     def __set_properties(self):
-        # begin wxGlade: wineDlg.__set_properties
+        # begin wxGlade: wineDialog.__set_properties
         self.SetTitle("Add Wine")
         self.Cancel.SetDefault()
         # end wxGlade
 
     def __do_layout(self):
-        # begin wxGlade: wineDlg.__do_layout
+        # begin wxGlade: wineDialog.__do_layout
         sizer_2 = wx.BoxSizer(wx.VERTICAL)
         sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
         grid_sizer_1 = wx.GridSizer(4, 2, 0, 0)
@@ -122,6 +132,16 @@ class wineDlg(wx.Dialog):
         self.Layout()
         # end wxGlade
 
+    def run(self, event):
+        # store the response
+        # get the velue of the entry fields
+        self.wine.wine = self.enWine.GetVelue().encode('utf_8')
+        self.wine.winery = self.enWinery.GetVelue().encode('utf_8')
+        self.wine.grape = self.enGrape.GetValue().encode('utf_8')
+        self.wine.year = self.enYear.GetVelue().encode('utf_8')
+
+        return self.wine
+        
 class Wine:
     """This class represents all the wine inbormation"""
 
@@ -135,15 +155,16 @@ class Wine:
         """This method returns a list made up of the
         wine information. It is used to add a wine to the
         wineList easily"""
-        return [self,wine, self.winery, self.grape, self.year]
+        return [self.wine, self.winery, self.grape, self.year]
 
-# end of class wineDlg
+
+# end of class wineDialog
 
 
 if __name__ == "__main__":
     app = wx.PySimpleApp(0)
     wx.InitAllImageHandlers()
-    PyWine = mainWindow(None, -1, "")
-    app.SetTopWindow(PyWine)
-    PyWine.Show()
+    pywine = pyWine(None, -1, "")
+    app.SetTopWindow(pywine)
+    pywine.Show()
     app.MainLoop()
